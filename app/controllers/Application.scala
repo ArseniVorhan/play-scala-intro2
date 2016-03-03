@@ -1,7 +1,7 @@
 package controllers
 
 
-import models.{DB, Person}
+import models.{ScalaTwitterClientExample, DB, Person}
 import play.api.data.Forms._
 import play.api.data.Form
 import play.api.libs.json.Json
@@ -27,8 +27,13 @@ class Application extends Controller{
 
   }
 
-  def getPersons() = Action {
+  def getPersons = Action {
     val persons = DB.query[Person].fetch
     Ok(Json.toJson(persons))
+  }
+  def getMessages = Action {
+
+    val messages = ScalaTwitterClientExample.getTweets
+    Ok(messages.toString)
   }
 }
