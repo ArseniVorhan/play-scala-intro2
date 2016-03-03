@@ -1,11 +1,12 @@
 package controllers
 
 
-import models.{ScalaTwitterClientExample, DB, Person}
+import models.{DB, Person}
 import play.api.data.Forms._
 import play.api.data.Form
 import play.api.libs.json.Json
 import play.api.mvc._
+import services.TwitterService
 
 
 class Application extends Controller{
@@ -33,7 +34,7 @@ class Application extends Controller{
   }
   def getMessages = Action {
 
-    val messages = ScalaTwitterClientExample.getTweets
+    val messages = TwitterService.getTweets
     Ok(messages.toString)
   }
 }

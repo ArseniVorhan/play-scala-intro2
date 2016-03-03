@@ -1,4 +1,4 @@
-package models
+package services
 
 /**
   * Created by Arseni on 3/3/2016.
@@ -6,10 +6,11 @@ package models
 
 import java.util
 
-import twitter4j.{DirectMessage, TwitterFactory}
+import models.Message
 import twitter4j.conf.ConfigurationBuilder
+import twitter4j.{Status, TwitterFactory}
 
-object ScalaTwitterClientExample {
+object TwitterService {
 
   val messageList = new util.ArrayList[Message]()
 
@@ -26,18 +27,17 @@ object ScalaTwitterClientExample {
     val twitter = tf.getInstance()
 
 
-    val messages =   twitter.directMessages.getDirectMessages
+    val messages = twitter.timelines.getUserTimeline
 
+    val it = messages.iterator()
+    while (it.hasNext) {
+      val message = it.next()
+      processMessage(message)
+    }
 
-        val it = messages.iterator()
-        while (it.hasNext) {
-          val message = it.next()
-          processMessage(message)
-        }
-
-    def processMessage(message: DirectMessage) = {
+    def processMessage(status: Status) = {
       messageList.add(
-        new Message(message.getText, message.getRecipientScreenName))
+        new Message(status.getText, status.getCreatedAt.toString))
     }
 
     messageList
