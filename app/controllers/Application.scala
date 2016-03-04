@@ -25,16 +25,21 @@ class Application extends Controller{
     val person = personForm.bindFromRequest.get
     DB.save(person)
     Redirect(routes.Application.index)
-
   }
 
   def getPersons = Action {
-    val persons = DB.query[Person].fetch
+    val persons = DB.query[Person].fetch()
     Ok(Json.toJson(persons))
   }
+
   def getMessages = Action {
 
     val messages = TwitterService.getTweets
-    Ok(messages.toString)
+//    Ok(views.html.messages(messages.toString))
+//
+
+//    val users = Json.obj("message" -> messages)
+//
+    Ok(Json.toJson(messages))
   }
 }

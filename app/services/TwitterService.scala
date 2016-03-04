@@ -4,17 +4,17 @@ package services
   * Created by Arseni on 3/3/2016.
   */
 
-import java.util
-
 import models.Message
 import twitter4j.conf.ConfigurationBuilder
 import twitter4j.{Status, TwitterFactory}
+import scala.collection.mutable.ListBuffer
 
 object TwitterService {
 
-  val messageList = new util.ArrayList[Message]()
 
-  def getTweets: util.ArrayList[Message] = {
+  var messageList = new ListBuffer[Message]()
+
+  def getTweets: List[Message] = {
 
     // (1) config work to create a twitter object
     val cb = new ConfigurationBuilder()
@@ -29,6 +29,7 @@ object TwitterService {
 
     val messages = twitter.timelines.getUserTimeline
 
+
     val it = messages.iterator()
     while (it.hasNext) {
       val message = it.next()
@@ -36,11 +37,11 @@ object TwitterService {
     }
 
     def processMessage(status: Status) = {
-      messageList.add(
-        new Message(status.getText, status.getCreatedAt.toString))
+      messageList += new Message(status.getText, status.getCreatedAt.toString)
+
     }
 
-    messageList
+    messageList.toList
 
     //    val it = statuses.iterator()
     //    while (it.hasNext()) {
