@@ -48,9 +48,11 @@ class Application extends Controller{
 
     val userList = TwitterService.getTweets(hashtag)
 
-    val tweets = Json.obj("tweets" -> userList)
+    val tweets: JsValue = Json.obj("tweets" -> userList)
 
-    Ok(tweets)
+    Ok(views.html.messages(tweets))
+
+//    Ok(tweets)
   }
 
 }
