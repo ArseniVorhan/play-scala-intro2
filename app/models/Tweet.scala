@@ -1,7 +1,7 @@
 package models
 import play.api.libs.json._
 
-case class Tweet(username: String, tweet: String, sentiment: String)
+case class Tweet(username: String, tweet: String, sentiment: String, score: String)
 
 object Tweet {
 
@@ -13,7 +13,8 @@ object Tweet {
       val tweetSeq = Seq(
         "username" -> JsString(tweet.username),
         "tweet" -> JsString(tweet.tweet),
-        "sentiment" -> JsString(tweet.sentiment)
+        "sentiment" -> JsString(tweet.sentiment),
+        "score" -> JsString(tweet.score)
       )
       JsObject(tweetSeq)
     }
@@ -21,7 +22,7 @@ object Tweet {
     // convert from JSON string to a Tweet object (de-serializing from JSON)
     // (i don't need this method; just here to satisfy the api)
     def reads(json: JsValue): JsResult[Tweet] = {
-      JsSuccess(Tweet("", "", ""))
+      JsSuccess(Tweet("", "", "", ""))
     }
 
   }

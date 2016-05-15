@@ -30,7 +30,7 @@ object TwitterService {
 
 
     val query = new Query("#" + hashtag)
-    query.setCount(10)
+    query.setCount(40)
 
     val qr = twitter.search(query)
     val qrTweets = qr.getTweets()
@@ -54,8 +54,9 @@ object TwitterService {
         .asString
 
       val SAResponse = Json.parse(result.body)
-      val sentiment = SAResponse.\\("aggregate")(0).\\("sentiment")(0).toString()
-      messageList += new Tweet(status.getUser.getName, status.getText, sentiment)
+      val sentiment = SAResponse.\\("aggregate")(0).\\("sentiment")(0).toString().replaceAll("\"", "")
+      val score = SAResponse.\\("aggregate")(0).\\("score")(0).toString().replaceAll("\"", "")
+      messageList += new Tweet(status.getUser.getName, status.getText, sentiment, score)
 
     }
 
