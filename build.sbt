@@ -20,8 +20,10 @@ libraryDependencies += "org.sorm-framework" % "sorm" % "0.4.1"
 
 libraryDependencies += "com.h2database" % "h2" % "1.4.187"
 libraryDependencies += "org.twitter4j" % "twitter4j-core" % "4.0.4"
+libraryDependencies += "org.scalaj" % "scalaj-http_2.11" % "2.2.1"
 
 dependencyOverrides += "org.scala-lang" % "scala-compiler" % scalaVersion.value
+
 // Play provides two styles of routers, one expects its actions to be injected, the
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator

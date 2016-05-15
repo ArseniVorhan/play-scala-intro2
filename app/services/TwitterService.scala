@@ -5,17 +5,18 @@ package services
   */
 
 import models.Tweet
+import play.api.libs.json.Json
 import twitter4j.conf.ConfigurationBuilder
 import twitter4j.{Query, Status, TwitterFactory}
 
 import scala.collection.mutable.ListBuffer
+import scalaj.http.Http
 
 object TwitterService {
 
 
-  var messageList = new ListBuffer[Tweet]()
-
   def getTweets(hashtag: String): List[Tweet] = {
+    var messageList = new ListBuffer[Tweet]()
 
     // (1) config work to create a twitter object
     val cb = new ConfigurationBuilder()
@@ -29,7 +30,7 @@ object TwitterService {
 
 
     val query = new Query("#" + hashtag)
-    query.setCount(100)
+    query.setCount(10)
 
     val qr = twitter.search(query)
     val qrTweets = qr.getTweets()
@@ -46,7 +47,15 @@ object TwitterService {
     }
 
     def processMessage(status: Status) = {
-      messageList += new Tweet(status.getText, status.getCreatedAt.toString)
+
+      val result = Http("https://api.havenondemand.com/1/api/sync/analyzesentiment/v1")
+        .param("text", status.getText)
+        .param("apikey", "f0f2e750-ce78-48e0-a4cb-a434632eb91c")
+        .asString
+
+      val SAResponse = Json.parse(result.body)
+      val sentiment = SAResponse.\\("aggregate")(0).\\("sentiment")(0).toString()
+      messageList += new Tweet(status.getUser.getName, status.getText, sentiment)
 
     }
 
