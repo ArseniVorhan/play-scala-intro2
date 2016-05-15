@@ -5,11 +5,9 @@
 # Home page
 GET     /                           controllers.Application.index
 
-POST    /person                     controllers.Application.addPerson
 
 POST    /search                     controllers.Application.SearchByHashtag
 
-GET    /persons                     controllers.Application.getPersons
 GET    /messages                     controllers.Application.getTweets(hashtag: String)
 
 # Map static resources from the /public folder to the /assets URL path
