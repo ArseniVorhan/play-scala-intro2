@@ -1,10 +1,10 @@
 package controllers
 
 
-import models.{DB, Person}
-import play.api.data.Forms._
+import models._
 import play.api.data.Form
-import play.api.libs.json.Json
+import play.api.data.Forms._
+import play.api.libs.json._
 import play.api.mvc._
 import services.TwitterService
 
@@ -21,10 +21,22 @@ class Application extends Controller{
     )(Person.apply)(Person.unapply)
   }
 
+  val searchForm: Form[Hashtag] = Form {
+    mapping(
+      "hashtag" -> text
+    )(Hashtag.apply)(Hashtag.unapply)
+  }
+
   def addPerson() = Action { implicit request =>
     val person = personForm.bindFromRequest.get
     DB.save(person)
     Redirect(routes.Application.index)
+  }
+
+  def SearchByHashtag() = Action { implicit request =>
+    val hashtag = searchForm.bindFromRequest.get
+
+    Redirect(routes.Application.getTweets(hashtag.hashtag))
   }
 
   def getPersons = Action {
@@ -32,14 +44,13 @@ class Application extends Controller{
     Ok(Json.toJson(persons))
   }
 
-  def getMessages = Action {
+  def getTweets(hashtag: String) = Action {
 
-    val messages = TwitterService.getTweets
-//    Ok(views.html.messages(messages.toString))
-//
+    val userList = TwitterService.getTweets(hashtag)
 
-//    val users = Json.obj("message" -> messages)
-//
-    Ok(Json.toJson(messages))
+    val tweets = Json.obj("tweets" -> userList)
+
+    Ok(tweets)
   }
+
 }

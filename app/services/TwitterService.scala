@@ -4,17 +4,18 @@ package services
   * Created by Arseni on 3/3/2016.
   */
 
-import models.Message
+import models.Tweet
 import twitter4j.conf.ConfigurationBuilder
-import twitter4j.{Status, TwitterFactory}
+import twitter4j.{Query, Status, TwitterFactory}
+
 import scala.collection.mutable.ListBuffer
 
 object TwitterService {
 
 
-  var messageList = new ListBuffer[Message]()
+  var messageList = new ListBuffer[Tweet]()
 
-  def getTweets: List[Message] = {
+  def getTweets(hashtag: String): List[Tweet] = {
 
     // (1) config work to create a twitter object
     val cb = new ConfigurationBuilder()
@@ -27,28 +28,29 @@ object TwitterService {
     val twitter = tf.getInstance()
 
 
-    val messages = twitter.timelines.getUserTimeline
+    val query = new Query("#" + hashtag)
+    query.setCount(100)
+
+    val qr = twitter.search(query)
+    val qrTweets = qr.getTweets()
 
 
-    val it = messages.iterator()
+
+//    val messages = twitter.timelines.getUserTimeline
+
+
+    val it = qrTweets.iterator()
     while (it.hasNext) {
       val message = it.next()
       processMessage(message)
     }
 
     def processMessage(status: Status) = {
-      messageList += new Message(status.getText, status.getCreatedAt.toString)
+      messageList += new Tweet(status.getText, status.getCreatedAt.toString)
 
     }
 
     messageList.toList
-
-    //    val it = statuses.iterator()
-    //    while (it.hasNext()) {
-    //      val status = it.next()
-    //      println(status.getUser().getName() + ":" +
-    //        status.getText());
-    //    }
 
   }
 }

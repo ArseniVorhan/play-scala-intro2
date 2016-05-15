@@ -3,9 +3,8 @@
 @main("Welcome to Play") {
 
 
-    <form action="@routes.Application.addPerson()" method="post">
-        <input name="name" type="text">
-        <button>Add Person</button>
+    <form action="@routes.Application.SearchByHashtag()" method="post">
+        <input name="hashtag" type="text">
+        <button>search by hashtag</button>
     </form>
 }
-    @play20.welcome(message)
