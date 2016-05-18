@@ -15,7 +15,7 @@ import scalaj.http.Http
 object TwitterService {
 
 
-  def getTweets(hashtag: String): List[Tweet] = {
+  def getTweets(hashtag: String): Array[Integer] = {
     var messageList = new ListBuffer[Tweet]()
 
     // (1) config work to create a twitter object
@@ -60,7 +60,31 @@ object TwitterService {
 
     }
 
-    messageList.toList
 
+    var positiveNumbers = 0;
+    var negativeNumbers = 0;
+    var neutralNumbers = 0;
+
+    val tweetIterator = messageList.iterator;
+    while (tweetIterator.hasNext) {
+      val tweet = tweetIterator.next()
+      if (tweet.sentiment == "positive"){
+        positiveNumbers+=1
+      }else if (tweet.sentiment == "negative"){
+        negativeNumbers+=1
+      }else{
+        neutralNumbers+=1
+      }
+    }
+
+    val chars = new Array[Integer](4)
+    chars(0) = positiveNumbers;
+    chars(1) = negativeNumbers;
+    chars(2) = neutralNumbers;
+    chars(3) = messageList.size;
+
+
+
+    chars
   }
 }

@@ -4,7 +4,6 @@ package controllers
 import models._
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.libs.json._
 import play.api.mvc._
 import services.TwitterService
 
@@ -28,11 +27,11 @@ class Application extends Controller{
 
   def getTweets(hashtag: String) = Action {
 
-    val userList = TwitterService.getTweets(hashtag)
+    val values = TwitterService.getTweets(hashtag)
 
-    val tweets: JsValue = Json.obj("tweets" -> userList)
+//    val tweets: JsValue = Json.obj("tweets" -> userList)
 
-    Ok(views.html.messages(tweets))
+    Ok(views.html.messages(values))
 
 //    Ok(tweets)
   }
